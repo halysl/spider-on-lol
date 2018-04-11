@@ -13,3 +13,9 @@ class LOLHeroNameSpiderItem(scrapy.Item):
     # name英雄名称，title英雄称号
     name = scrapy.Field()
     title = scrapy.Field()
+
+class LOLItemNameSpiderItem(scrapy.Item):
+    # name物品名称，synthetic_price合成价，total_price总价
+    name = scrapy.Field()
+    synthetic_price = scrapy.Field()
+    total_price = scrapy.Field()

@@ -9,6 +9,12 @@ class LOLHeroNameSpider(Spider):
     '''    
     name = "LOL-Hero-Name"  # 唯一的名字，命令行执行的时候使用
     allowed_domains = ["http://lol.178.com"]  # 允许爬取的网站域
+    # 同一个项目下，多个spider对应不同的pipeline，需要在spider中修改配置，setting.py中不做pipeline配置
+    custom_settings = {
+        'ITEM_PIPELINES':{
+            'lolSpider.pipelines.LOLHeroNameSpiderPipeline': 300,
+        }
+    }
     start_urls = ["http://lol.178.com/champion/",]  # 开始爬取的第一条url
 
     # parse方法用于处理数据，传入一个response对象
