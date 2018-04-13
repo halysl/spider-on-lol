@@ -10,12 +10,18 @@ import scrapy
 
 class LOLHeroNameSpiderItem(scrapy.Item):
     '''继承自scrapy.Item，在spiders/lol-hero-name-spidder.py中使用'''
-    # name英雄名称，title英雄称号
-    name = scrapy.Field()
-    title = scrapy.Field()
+    # name英雄名称，e_name英雄英文名称（即英雄id），title英雄称号
+    hero_name = scrapy.Field()
+    hero_e_name = scrapy.Field()
+    hero_title = scrapy.Field()
 
 class LOLItemNameSpiderItem(scrapy.Item):
-    # name物品名称，synthetic_price合成价，total_price总价
-    name = scrapy.Field()
-    synthetic_price = scrapy.Field()
-    total_price = scrapy.Field()
+    # item_id物品id，item_name物品名称
+    item_id = scrapy.Field()
+    item_name = scrapy.Field()
+    # price留坑
+    # item_price = scrapy.Field()
+    
+
+class LOLItemPicSpiderItem(scrapy.Item):
+    pass

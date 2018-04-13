@@ -64,9 +64,9 @@ COOKIES_ENABLED = False
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-    'lolSpider.pipelines.LOLItemNameSpiderPipeline': 300,
-}
+#ITEM_PIPELINES = {
+#    
+#}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -88,3 +88,19 @@ ITEM_PIPELINES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+'''
+splash相关配置，可见https://github.com/scrapy-plugins/scrapy-splash
+'''
+SPLASH_URL = 'http://172.17.0.2:8050/'  # splash在docker下的url
+# 下载中间件，
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy_splash.SplashCookiesMiddleware': 723,
+    'scrapy_splash.SplashMiddleware': 725,
+    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
+}
+# 爬虫中间件
+SPIDER_MIDDLEWARES = {
+    'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+}
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'  # 过滤器（必须）
+HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage' # 使用http缓存 
