@@ -16,7 +16,7 @@ class LOLHeroAvatarSpider(Spider):
         },
         'IMAGES_STORE':'../lolSpider/lolSpider/img/hero_avatar_img',
     }
-    start_urls = ["http://lol.qq.com/web201310/info-heros.shtml#Navi"GetPicfor,]
+    start_urls = ["http://lol.qq.com/web201310/info-heros.shtml#Navi"]
 
     def start_requests(self):
         for url in self.start_urls:

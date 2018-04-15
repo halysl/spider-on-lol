@@ -32,3 +32,8 @@ class LOLHeroAvatarSpiderItem(scrapy.Item):
     image_urls = scrapy.Field()
     # images = scrapy.Field()
     # image_paths = scrapy.Field()
+
+class LOLHeroSkinSpiderItem(scrapy.Item):
+    image_urls = scrapy.Field()
+    image_names = scrapy.Field()
+    image_id = scrapy.Field()
