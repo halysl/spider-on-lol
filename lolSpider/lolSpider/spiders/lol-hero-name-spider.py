@@ -14,7 +14,7 @@ class LOLHeroNameSpider(Spider):
     # 同一个项目下，多个spider对应不同的pipeline，需要在spider中修改配置，setting.py中不做pipeline配置
     custom_settings = {
         'ITEM_PIPELINES':{
-            'lolSpider.pipelines.LOLHeroNameSpiderPipeline': 300,
+            'lolSpider.pipelines.LOLHeroNamePipeline': 300,
         },        
     }
 

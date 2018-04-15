@@ -7,12 +7,12 @@ from scrapy_splash import SplashRequest
 
 class LOLItemNameSpider(Spider):
     '''
-    第二个爬虫类，爬取英熊联盟所有物品名字、合成价及总价
+    第二个爬虫类，爬取英雄所有物品名字及id
     '''
     name = "LOL-Item-Name"  # 唯一的名字，命令行执行的时候使用
     custom_settings = {
         'ITEM_PIPELINES':{
-            'lolSpider.pipelines.LOLItemNameSpiderPipeline': 300,
+            'lolSpider.pipelines.LOLItemNamePipeline': 300,
         }
     }
     
@@ -33,7 +33,7 @@ class LOLItemNameSpider(Spider):
         # 对sites的每一个a元素进行循环
         for site in sites:
             item = LOLItemNameSpiderItem()  # item是LOLItemNameSpiderItem的实例，包含2项item_id、item_name
-            item['item_id'] = site.xpath("./@data-title").extract_first()  
+            item['item_id'] = site.xpath("@data-title").extract_first()  
             item['item_name'] = site.xpath("p/text()").extract_first()  
             # yield函数很复杂，在这里可以理解为“不立即结束的return”，当有了yield函数，可以逐项的将数据添加到json文件或csv文件
             yield {'id':item['item_id'],'name':item['item_name']}  

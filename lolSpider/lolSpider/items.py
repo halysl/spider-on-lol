@@ -24,4 +24,11 @@ class LOLItemNameSpiderItem(scrapy.Item):
     
 
 class LOLItemPicSpiderItem(scrapy.Item):
-    pass
+    image_urls = scrapy.Field()
+    # images = scrapy.Field()
+    # image_paths = scrapy.Field()
+
+class LOLHeroAvatarSpiderItem(scrapy.Item):
+    image_urls = scrapy.Field()
+    # images = scrapy.Field()
+    # image_paths = scrapy.Field()
