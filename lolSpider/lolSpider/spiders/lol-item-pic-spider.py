@@ -1,9 +1,11 @@
+# -*- coding:utf-8 -*-
+from scrapy.http import Request
 from scrapy.spiders import Spider
 from scrapy.selector import Selector
-from scrapy.http import Request
+from scrapy_splash import SplashRequest
 
 from lolSpider.items import LOLItemPicSpiderItem
-from scrapy_splash import SplashRequest
+
 
 class LOLItemPicSpider(Spider):
     '''第三个爬虫类，爬取英雄联盟物品图片'''

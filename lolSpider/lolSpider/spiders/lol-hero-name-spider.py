@@ -1,14 +1,16 @@
+# -*- coding:utf-8 -*-
+import json
+from scrapy.http import Request
 from scrapy.spiders import Spider
 from scrapy.selector import Selector
-from scrapy.http import Request
-import json
+from scrapy_splash import SplashRequest  # 引入splash组件，获取js数据
+
 from lolSpider.items import LOLHeroNameSpiderItem
-# 引入splash组件，获取js数据
-from scrapy_splash import SplashRequest
+
 
 class LOLHeroNameSpider(Spider):
     '''
-    第一个爬虫类，爬取英熊联盟所有英雄名字及称号
+    第一个爬虫类，爬取英雄联盟所有英雄名字及称号
     '''    
     name = "LOL-Hero-Name"  # 唯一的名字，命令行执行的时候使用
     # 同一个项目下，多个spider对应不同的pipeline，需要在spider中修改配置，setting.py中不做pipeline配置
@@ -27,6 +29,7 @@ class LOLHeroNameSpider(Spider):
             yield SplashRequest(url=url, callback=self.parse, args={'wait': 0.5},
                 endpoint='render.html',
             )
+    
     # parse方法用于处理数据，传入一个response对象
     def parse(self, response):
         # sites是一个可迭代对象，它代表了从response对象中获取某些数据而形成的可迭代对象

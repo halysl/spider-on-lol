@@ -1,12 +1,15 @@
+# -*- coding:utf-8 -*-
 import sys
 import scrapy
 from scrapy import Request
 from scrapy.spiders import Spider
 from scrapy_splash import SplashRequest
+
 from lolSpider.items import LOLHeroSkinSpiderItem
 
 
-class LOLHeroSkinSpider(scrapy.Spider):    
+class LOLHeroSkinSpider(scrapy.Spider):
+    '''第五个爬虫类，爬取所有英雄皮肤'''
     name = 'LOL-Hero-Skin'
     custom_settings = {
         'ITEM_PIPELINES':{

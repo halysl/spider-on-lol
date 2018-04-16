@@ -1,6 +1,7 @@
 import os
 import sys
 
+# 将下载的图片文件重命名
 # 打开名字文件
 with open('../lol-skin-info.json','r') as f:
     # 按行读取，依次命名

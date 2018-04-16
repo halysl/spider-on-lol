@@ -1,12 +1,14 @@
+# -*- coding:utf-8 -*-
+from scrapy.http import Request
 from scrapy.spiders import Spider
 from scrapy.selector import Selector
-from scrapy.http import Request
-
-from lolSpider.items import LOLHeroAvatarSpiderItem
 from scrapy_splash import SplashRequest
 
+from lolSpider.items import LOLHeroAvatarSpiderItem
+
+
 class LOLHeroAvatarSpider(Spider):
-    '''第三个爬虫类，爬取英雄联盟英雄头像'''
+    '''第四个爬虫类，爬取英雄联盟英雄头像'''
     name = "LOL-Hero-Avatar"
     # 爬虫私有配置，使用scrapy默认的image pipeline
     # 注意IMAGESS_STORE的配置，“../”代表的是scrapy工程的子目录
