@@ -46,7 +46,7 @@ class LOLHeroSkinInfoPipeline(object):
     def __init__(self):
         # codecs,python编解码器，以字节写方式打开一个文件，方便后面的转换中文
         # 关于codecs可以查看https://docs.python.org/3/library/codecs.html
-        self.file = codecs.open('info.json', 'wb', encoding='utf-8')
+        self.file = codecs.open('lol-skin-info.json', 'wb', encoding='utf-8')
     def process_item(self, item, spider):
         line = json.dumps(dict(item)) + '\n'  # line是str类型
         # 向codecs("wb")打开的文件写入line经过utf-8编码后再经过unicode编码，最后存储的字符是中文
