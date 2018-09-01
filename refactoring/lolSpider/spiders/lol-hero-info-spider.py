@@ -1,9 +1,10 @@
 # -*- coding:utf-8 -*-
 
+import re
 import json
-from scrapy.http import Request
+
+from scrapy import log
 from scrapy.spiders import Spider
-from scrapy.selector import Selector
 from scrapy_splash import SplashRequest  # 引入splash组件，获取js数据
 
 from lolSpider.items import LOLHeroInfoSpiderItem
@@ -22,8 +23,8 @@ class LOLHeroInfoSpider(Spider):
         },
     }
 
-    allowed_domains = ["http://lol.qq.com/web201310/info-heros.shtml"]  # 允许爬取的网站域
-    start_urls = ["http://lol.qq.com/web201310/info-heros.shtml",]  # 开始爬取的第一条url
+    allowed_domains = ["http://lol.qq.com"]  # 允许爬取的网站域
+    start_urls = ["http://lol.qq.com/web201310/info-heros.shtml"]  # 开始爬取的第一条url
     
     def start_requests(self):
         for url in self.start_urls:
@@ -32,21 +33,27 @@ class LOLHeroInfoSpider(Spider):
     
     # parse方法用于处理数据，传入一个response对象
     def parse(self, response):
-        # sites是一个可迭代对象，它代表了从response对象中获取某些数据而形成的可迭代对象
-        # 使用xpath方法找到特定的元素组成的数据，在这里代表“找到一个id为jSearchHeroDiv的元素它的所有li元素，很多个li元素，所以成为一个可迭代对象
-        # XPath是一门在XML、HTML文档中查找信息的语言，它可以查找元素。教程可见http://www.w3school.com.cn/xpath/index.asp
-        # 之前的xpath很长，但不需要对着网页源代码查找，请见http://www.locoy.com/Public/guide/V9/HTML/XPath%E6%8F%90%E5%8F%96.html
+        default_hero_js = 'http://lol.qq.com/biz/hero/'
         sites = response.xpath("//*[@id=\"jSearchHeroDiv\"]/li")
-        items = []
-
-        # 对sites的每一个li元素进行循环
         for site in sites:
-            item = LOLHeroInfoSpiderItem()  # item是LOLHeroNameSpiderItem的实例，包含两项name和title
-            item['hero_name'] = site.xpath("a/@title").extract_first().split(" ")[1]  # 此处使用xpath的相对定位，将li元素内的a元素的title属性值以空格切分取第二项给item['name']
-            item['hero_title'] = site.xpath("a/@title").extract_first().split(" ")[0]  # 此处使用xpath的相对定位，将li元素内的a元素的title属性值以空格切分取第一项给item['title']
-            item['hero_e_name'] = site.xpath("a/@href").extract_first()[21:]  # 将li元素内的a元素的href取切片[21:]获得英雄的英文名称
-            # yield函数很复杂，在这里可以理解为“不立即结束的return”，当有了yield函数，可以逐项的将数据添加到json文件或csv文件
-            yield {'name':item['hero_name'],'title':item['hero_title'],"e_name":item['hero_e_name']}  
-            items.append(item)
-        # return 也可以完成yield的任务（在这个文件内），两者都可以输出到json文件（保留一个就好hh）
-        return items
+            item = LOLHeroInfoSpiderItem()
+            item['hero_name'] = site.xpath("a/@title").extract_first().split(" ")[1]
+            item['hero_title'] = site.xpath("a/@title").extract_first().split(" ")[0]
+            item['hero_e_name'] = site.xpath("a/@href").extract_first().split("=")[-1]
+            item['hero_detail_url'] = response.urljoin(site.xpath('a/@href').extract_first())
+            item['hero_avatar_image_url'] = site.xpath('a/img/@src').extract_first()
+            item['hero_avatar_image_name'] = "_".join(site.xpath("a/@title").extract_first().split(" "))
+            hero_js = "".join([default_hero_js, item["hero_e_name"], ".js"])
+            log.msg(hero_js)
+            item['hero_story'] = self.story_request(hero_js)
+
+            yield item
+
+    def story_request(self, hero_js):
+        return SplashRequest(url=hero_js, callback=self.parse_story, args={'wait': 0.5}, endpoint='render.html', )
+
+    def parse_story(self, response):
+        text = response.text
+        story = text.split('"lore": ')[-1].split('"blurb"')[0]
+        log.msg(story)
+        return story

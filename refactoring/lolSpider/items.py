@@ -14,6 +14,7 @@ class LOLHeroInfoSpiderItem(scrapy.Item):
     继承自scrapy.Item，在spiders/lol-hero-name-spidder.py中使用
     """
     # name英雄名称，e_name英雄英文名称（即英雄id），title英雄称号
+    hero_detail_url = scrapy.Field()
     hero_name = scrapy.Field()
     hero_e_name = scrapy.Field()
     hero_title = scrapy.Field()
