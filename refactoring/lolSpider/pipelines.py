@@ -36,7 +36,7 @@ class LOLHeroAvatarPipeline(ImagesPipeline):
         return 'full/%s' % image_guid
 
     def get_media_requests(self, item, info):
-        for image_url in item['image_urls']:
+        for image_url in item['hero_avatar_image_url']:
             yield Request(image_url)
 
     def item_completed(self, results, item, info):

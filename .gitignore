@@ -102,6 +102,7 @@ ENV/
 
 # spic
 *.jpg
+*.png
 .idea/*
 *.json
 test.py
