@@ -8,6 +8,9 @@ scrapy-splash = "*"
 scrapy = "*"
 pymysql = "*"
 sqlalchemy = "*"
+pillow = "*"
+requests = "*"
+ipython = "*"
 
 [dev-packages]
 

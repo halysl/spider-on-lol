@@ -21,7 +21,7 @@ class LOLHeroInfoPipeline(object):
     def __init__(self):
         # codecs,python编解码器，以字节写方式打开一个文件，方便后面的转换中文
         # 关于codecs可以查看https://docs.python.org/3/library/codecs.html
-        self.file = codecs.open('lol-hero-name.json', 'wb', encoding='utf-8')
+        self.file = codecs.open('lol-hero-info.json', 'wb', encoding='utf-8')
 
     def process_item(self, item, spider):
         line = json.dumps(dict(item)) + '\n'  # line是str类型

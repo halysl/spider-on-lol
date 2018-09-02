@@ -2,6 +2,7 @@
 
 import re
 import json
+import requests
 
 from scrapy import log
 from scrapy.spiders import Spider
@@ -45,15 +46,11 @@ class LOLHeroInfoSpider(Spider):
             item['hero_avatar_image_name'] = "_".join(site.xpath("a/@title").extract_first().split(" "))
             hero_js = "".join([default_hero_js, item["hero_e_name"], ".js"])
             log.msg(hero_js)
-            item['hero_story'] = self.story_request(hero_js)
+
+            r = requests.get(hero_js)
+            r.encoding = 'utf-8'
+            text = r.text
+            story = text.split('lore":"')[-1].split('","blurb')[0]
+            item['hero_story'] = story.encode('utf-8').decode('unicode_escape')
 
             yield item
-
-    def story_request(self, hero_js):
-        return SplashRequest(url=hero_js, callback=self.parse_story, args={'wait': 0.5}, endpoint='render.html', )
-
-    def parse_story(self, response):
-        text = response.text
-        story = text.split('"lore": ')[-1].split('"blurb"')[0]
-        log.msg(story)
-        return story
