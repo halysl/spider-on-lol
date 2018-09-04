@@ -1,7 +1,6 @@
 # -*- coding:utf-8 -*-
 
 import os
-import re
 import json
 
 from scrapy.spiders import Spider
@@ -35,5 +34,32 @@ class LOLSkinInfoSpider(Spider):
     }
 
     allowed_domains = ["http://lol.qq.com", "http://ossweb-img.qq.com/images/"]  # 允许爬取的网站域
-    # 开始爬取的第一条url
-    start_urls = ["http://lol.qq.com/web201310/info-heros.shtml"]
+
+    data = []
+    start_urls = []
+    with open('lol-hero-info.json', 'r') as f:
+        for line in f.readlines():
+            data.append(json.loads(line))
+
+    for hero in data:
+        start_urls.append(data)
+
+    def start_requests(self):
+        for url in self.start_urls:
+            # 处理start_urls，以splashRequest的方法执行parse方法
+            yield SplashRequest(url=url, callback=self.parse, args={'wait': 0.5}, endpoint='render.html',)
+
+    def parse(self, response):
+        skins = response.xpath('//*[@id="skinBG"]')
+        for skin in skins:
+            item = LOLSkinInfoSpiderItem()
+            item['image_urls'] = skin.xpath('img/@src').extract_first()
+            item['image_id'] = skin.xpath('img/@src').extract_first().split('big')[-1].split('.')[0]
+
+            image_names = skin.xpath("a/@title").extract_first()
+            if image_names == "默认皮肤":
+                item['image_names'] = image_names + " " + response.xpath("//*[@id=\"DATAnametitle\"]/text()").extract_first().split(' ')[-1]
+            else:
+                item['image_names'] = image_names
+
+            yield item
