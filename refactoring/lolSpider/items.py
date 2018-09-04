@@ -36,7 +36,7 @@ class LOLItemInfoSpiderItem(scrapy.Item):
     item_image_url = scrapy.Field()
 
 
-class LOLHeroSkinSpiderItem(scrapy.Item):
+class LOLSkinInfoSpiderItem(scrapy.Item):
     # image_urls图片链接，image_names图片名称，image_id图片保存名称
     image_urls = scrapy.Field()
     image_names = scrapy.Field()
