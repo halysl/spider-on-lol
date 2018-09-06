@@ -3,6 +3,7 @@
 import os
 import json
 
+from scrapy import log
 from scrapy.spiders import Spider
 from scrapy_splash import SplashRequest  # 引入splash组件，获取js数据
 
@@ -39,23 +40,21 @@ class LOLSkinInfoSpider(Spider):
     start_urls = []
     with open('lol-hero-info.json', 'r') as f:
         for line in f.readlines():
-            data.append(json.loads(line))
-
-    for hero in data:
-        start_urls.append(data)
+            start_urls.append(json.loads(line)['hero_detail_url'])
 
     def start_requests(self):
         for url in self.start_urls:
+            log.msg(url)
             # 处理start_urls，以splashRequest的方法执行parse方法
-            yield SplashRequest(url=url, callback=self.parse, args={'wait': 0.5}, endpoint='render.html',)
+            yield SplashRequest(url=url, callback=self.parse, args={'wait': 0.5}, endpoint='render.html')
 
     def parse(self, response):
-        skins = response.xpath('//*[@id="skinBG"]')
+        skins = response.xpath('//*[@id="skinBG"]/li')
         for skin in skins:
             item = LOLSkinInfoSpiderItem()
-            item['image_urls'] = skin.xpath('img/@src').extract_first()
-            item['image_id'] = skin.xpath('img/@src').extract_first().split('big')[-1].split('.')[0]
-
+            item['image_urls'] = ["".join(['http:', skin.xpath('img/@src').extract_first()])]
+            item['image_id'] = skin.xpath('img/@src').extract_first()
+            log.msg(item)
             image_names = skin.xpath("a/@title").extract_first()
             if image_names == "默认皮肤":
                 item['image_names'] = image_names + " " + response.xpath("//*[@id=\"DATAnametitle\"]/text()").extract_first().split(' ')[-1]
