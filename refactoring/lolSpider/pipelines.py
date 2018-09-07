@@ -62,13 +62,13 @@ class LOLItemImgPipeline(ImagesPipeline):
     """
     lol物品图像采集
     """
-    def file_path(self, request, response=None, info=None):
-        image_guid = request.url.split('/')[-1]
-        return 'full/%s' % image_guid
-
     def get_media_requests(self, item, info):
         for image_url in item['item_image_url']:
-            yield Request(image_url)
+            yield Request(image_url, meta={'item_name':item['item_name']})
+
+    def file_path(self, request, response=None, info=None):
+        image_guid = request.meta['item_name']
+        return 'full/%s.jpg' % image_guid
 
     def item_completed(self, results, item, info):
         image_paths = [x['path'] for ok, x in results if ok]
@@ -97,13 +97,14 @@ class LOLSkinImgPipeline(ImagesPipeline):
     """
     lol皮肤图片采集
     """
-    def file_path(self, request, response=None, info=None):
-        image_guid = request.url.split('/')[-1]
-        return 'full/%s' % (image_guid)
 
     def get_media_requests(self, item, info):
         for image_url in item['image_urls']:
-            yield Request(image_url)
+            yield Request(image_url, meta={'image_name': item['image_names']})
+
+    def file_path(self, request, response=None, info=None):
+        image_guid = request.meta['image_name']
+        return 'full/%s.jpg' % image_guid
 
     def item_completed(self, results, item, info):
         image_paths = [x['path'] for ok, x in results if ok]

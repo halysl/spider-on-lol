@@ -53,12 +53,12 @@ class LOLSkinInfoSpider(Spider):
         for skin in skins:
             item = LOLSkinInfoSpiderItem()
             item['image_urls'] = ["".join(['http:', skin.xpath('img/@src').extract_first()])]
-            item['image_id'] = skin.xpath('img/@src').extract_first()
-            log.msg(item)
-            image_names = skin.xpath("a/@title").extract_first()
+            item['image_id'] = skin.xpath('img/@src').extract_first().split('big')[-1].split('.jpg')[0]
+            image_names = skin.xpath("@title").extract_first()
             if image_names == "默认皮肤":
                 item['image_names'] = image_names + " " + response.xpath("//*[@id=\"DATAnametitle\"]/text()").extract_first().split(' ')[-1]
             else:
                 item['image_names'] = image_names
+            log.msg(item)
 
             yield item
