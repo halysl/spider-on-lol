@@ -34,7 +34,9 @@ class LOLSkinInfoSpider(Spider):
                       ' Chrome/52.0.2743.116 Safari/537.36',
     }
 
-    allowed_domains = ["http://lol.qq.com", "http://ossweb-img.qq.com/images/"]  # 允许爬取的网站域
+    allowed_domains = [
+        "http://lol.qq.com",
+        "http://ossweb-img.qq.com/images/"]  # 允许爬取的网站域
 
     data = []
     start_urls = []
@@ -49,14 +51,18 @@ class LOLSkinInfoSpider(Spider):
             yield SplashRequest(url=url, callback=self.parse, args={'wait': 0.5}, endpoint='render.html')
 
     def parse(self, response):
-        skins = response.xpath('//*[@id="skinBG"]/li')
+        skins = response.xpath('//*[@id="skinNAV"]/li')
         for skin in skins:
             item = LOLSkinInfoSpiderItem()
-            item['image_urls'] = ["".join(['http:', skin.xpath('img/@src').extract_first()])]
-            item['image_id'] = skin.xpath('img/@src').extract_first().split('big')[-1].split('.jpg')[0]
-            image_names = skin.xpath("@title").extract_first()
+
+            image_url = skin.xpath('a/img/@src').extract_first().replace('small', 'big')
+            item['image_urls'] = ["".join(['http:', image_url])]
+            item['image_id'] = skin.xpath(
+                'a/img/@src').extract_first().split('small')[-1].split('.jpg')[0]
+            image_names = skin.xpath("a/@title").extract_first()
             if image_names == "默认皮肤":
-                item['image_names'] = image_names + " " + response.xpath("//*[@id=\"DATAnametitle\"]/text()").extract_first().split(' ')[-1]
+                item['image_names'] = image_names + " " + response.xpath(
+                    "//*[@id=\"DATAnametitle\"]/text()").extract_first().split(' ')[-1]
             else:
                 item['image_names'] = image_names
             log.msg(item)
