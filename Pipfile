@@ -10,9 +10,9 @@ pymysql = "*"
 sqlalchemy = "*"
 pillow = "*"
 requests = "*"
-ipython = "*"
 
 [dev-packages]
+ipython = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"
