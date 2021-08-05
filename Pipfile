@@ -8,11 +8,17 @@ scrapy-splash = "*"
 scrapy = "*"
 pymysql = "*"
 sqlalchemy = "*"
-pillow = "*"
 requests = "*"
+pillow = ">=8.2.0"
+urllib3 = ">=1.26.5"
+Pygments = ">=2.7.4"
+lxml = ">=4.6.3"
+cryptography = ">=3.2"
+twisted = ">=20.3.0"
 
 [dev-packages]
 ipython = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8.5"
+
